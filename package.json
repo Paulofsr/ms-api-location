@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env LOGGING_CONSOLE_LEVEL=debug LOGGING_FILE_LEVEL=debug LOGGING_DB_LEVEL=error LOGGING_SAVE_REQUESTS=true LOGGING_USE_DB=false nodemon server.js",
     "dev": "cross-env NODE_ENV=dev node src/server.js",
-    "test": "cross-env LIMIT_WAITING=0 IN_TEST=/mock/ LANGUAGE=en LOGGING_CONSOLE_LEVEL=debug LOGGING_FILE_LEVEL=debug LOGGING_DB_LEVEL=error LOGGING_SAVE_REQUESTS=true LOGGING_USE_DB=false nyc --reporter=lcov --reporter=text-summary --all ./node_modules/mocha/bin/_mocha -- -R spec --recursive --timeout 120000"
+    "test": "cross-env LIMIT_WAITING=0 IN_TEST=/mock/ LANGUAGE=en LOGGING_CONSOLE_LEVEL=debug LOGGING_FILE_LEVEL=debug LOGGING_DB_LEVEL=error LOGGING_SAVE_REQUESTS=true LOGGING_USE_DB=false nyc --reporter=html --reporter=text-summary --all ./node_modules/mocha/bin/_mocha -- -R spec --recursive --timeout 120000"
   },
   "author": "Paulo Francisco",
   "license": "MIT",
@@ -29,7 +29,8 @@
     "winston-daily-rotate-file": "4.5.0"
   },
   "devDependencies": {
-    "@istanbuljs/nyc-config-babel": "^3.0.0",
+    "@istanbuljs/nyc-config-babel": "3.0.0",
+    "@istanbuljs/nyc-config-typescript": "1.0.1",
     "babel-plugin-istanbul": "^6.0.0",
     "chai": "4.2.0",
     "chai-arrays": "2.2.0",
@@ -38,6 +39,7 @@
     "mocha": "8.1.1",
     "nyc": "15.1.0",
     "promise": "8.1.0",
-    "supertest": "4.0.2"
+    "supertest": "4.0.2",
+    "ts-node": "^8.10.2"
   }
 }

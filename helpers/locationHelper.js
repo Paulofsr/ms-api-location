@@ -59,55 +59,55 @@ module.exports = function () {
                     });
 
             });
-        },
-
-        add: function (package) {
-            logger.info('[business-locationHelper] Start add location.');
-            return new Promise(function (resolve, reject) {
-                let location = {
-                    deviceId: "111",
-                    info: {
-                        date: "111",
-                        direaction: "111",
-                        distance: "111",
-                        delayReport: "111",
-                        composition: {
-                            completOriginal: "111",
-                            completConverted: "111",
-                            GPSFixed: "111",
-                            GPSHistoric: "111",
-                            ignitionOn: "111",
-                            latitudeNegative: "111",
-                            longitudeNegative: "111",
-                        },
-                        velocity: "111",
-                        latitude: "111",
-                        logintude: "111"
-                    },
-                    package: package,
-                    date: new Date()
-                }
-                try{
-                    locations.create(location)
-                        .then(function (nlocation) {
-                            logger.info('[business-locationHelper] The location has been added successfully.');
-                            resolve(nlocation);
-                        }, function (erro) {
-                            logger.error('[business-locationHelper] An error has ocurred while adding a location.', erro);
-                            reject({
-                                "status": 500,
-                                "message": "Internal error."
-                            });
-                        })
-                        .catch(function(e){
-                            logger.error('[business-locationHelper] An error has ocurred while adding a location.', erro);
-                            reject(e);
-                        })
-                } catch (e){
-                    reject(e);
-                }
-            });
         }
+
+        // add: function (package) {
+        //     logger.info('[business-locationHelper] Start add location.');
+        //     return new Promise(function (resolve, reject) {
+        //         let location = {
+        //             deviceId: "111",
+        //             info: {
+        //                 date: "111",
+        //                 direaction: "111",
+        //                 distance: "111",
+        //                 delayReport: "111",
+        //                 composition: {
+        //                     completOriginal: "111",
+        //                     completConverted: "111",
+        //                     GPSFixed: "111",
+        //                     GPSHistoric: "111",
+        //                     ignitionOn: "111",
+        //                     latitudeNegative: "111",
+        //                     longitudeNegative: "111",
+        //                 },
+        //                 velocity: "111",
+        //                 latitude: "111",
+        //                 logintude: "111"
+        //             },
+        //             package: package,
+        //             date: new Date()
+        //         }
+        //         try{
+        //             locations.create(location)
+        //                 .then(function (nlocation) {
+        //                     logger.info('[business-locationHelper] The location has been added successfully.');
+        //                     resolve(nlocation);
+        //                 }, function (erro) {
+        //                     logger.error('[business-locationHelper] An error has ocurred while adding a location.', erro);
+        //                     reject({
+        //                         "status": 500,
+        //                         "message": "Internal error."
+        //                     });
+        //                 })
+        //                 .catch(function(e){
+        //                     logger.error('[business-locationHelper] An error has ocurred while adding a location.', erro);
+        //                     reject(e);
+        //                 })
+        //         } catch (e){
+        //             reject(e);
+        //         }
+        //     });
+        // }
     };
 };
 
