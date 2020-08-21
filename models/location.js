@@ -4,22 +4,31 @@ var model = null;
 
 module.exports = function () {
 
-    var Video = mongoose.Schema({
-        href: { type: String, require: true },
-        user: {
-            userId: { type: String, require: true },
-            name: { type: String, require: true },
-            photo: { data: Buffer, contentType: String }
+    var Location = mongoose.Schema({
+        deviceId: { type: String, require: true },
+        info: {
+            date: String,
+            direaction: String,
+            distance: String,
+            delayReport: String,
+            composition: {
+                completOriginal: String,
+                completConverted: String,
+                GPSFixed: Number,
+                GPSHistoric: Number,
+                ignitionOn: Number,
+                latitudeNegative: Number,
+                longitudeNegative: Number,
+            },
+            velocity: String,
+            latitude: String,
+            logintude: String
         },
-        videoInfo: {
-            title: { type: String, require: true },
-            description: { type: String, require: true },
-            href: { type: String, require: true },
-            created: { type: Date, require: true }
-        }
+        package: { type: String, require: true },
+        date: { type: Date, require: true }
     });
 
-    model = model ? model : mongoose.model('Videos', Video);
+    model = model ? model : mongoose.model('Locations' + (process.env.IN_TEST ? 'Test' : ''), Location);
 
     return model;
 };

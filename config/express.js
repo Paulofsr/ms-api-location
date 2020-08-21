@@ -1,5 +1,5 @@
 var express = require('express');
-var load = require('express-load');
+var consign = require('consign');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var methodOverride = require('method-override');
@@ -17,8 +17,8 @@ module.exports = function () {
         limit: '10mb',
         extended: true
     }));
-    app.use(bodyParser.json({
-        limit: '10mb'
+    app.use(bodyParser.text({
+        limit: '1mb'
     }));
     app.use(methodOverride());
     app.use(cors());
@@ -46,9 +46,11 @@ module.exports = function () {
     //     }
     // ));
 
-    load('controllers', {
+
+    consign({
             cwd: 'api'
         })
+        .then('controllers')
         .then('routes')
         .into(app);
 

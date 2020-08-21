@@ -12,7 +12,7 @@ module.exports = function (settings) {
             }),
             new(winston.transports.DailyRotateFile)({
                 level: settings.logging.fileLevel || 'debug',
-                filename: 'logs/kaplan-%DATE%.log',
+                filename: 'logs/location-%DATE%.log',
                 datePattern: 'YYYY-MM-DD-HH',
                 zippedArchive: false,
                 maxSize: '20m',

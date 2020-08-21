@@ -7,12 +7,13 @@ var locationBO  = require('../../business/locationBO')();
 module.exports = function () {
     return {
         getById: function (req, res) {
-            locationBO.getById(req.params.device_id).then(function (location) {
+            locationBO.getById(req.params.device_id)
+            .then(function (location) {
                 logger.debug('[controllers-locations] The getById return was:', location);
                 res.status(200).json(location);
             }, function (error) {
                 logger.error('[controllers-locations] An error has occurred ')
-                res.status(404).json(error);
+                res.status(error.status || 404).json(error);
             });
         },
 
@@ -26,8 +27,8 @@ module.exports = function () {
                             res.status(201).json(rAdd);
                         })
                         .catch(function (error) {
-                            logger.error('[controllers-locations] Error in add Vacation', error);
-                            res.status(500).json(error);
+                            logger.error('[controllers-locations] Error in add location', error);
+                            res.status(error.status || 417).json(error);
                         });
         }
     };

@@ -24,6 +24,14 @@ module.exports = function () {
     });
 
     process.on('SIGINT', function () {
+        if (process.env.IN_TEST) {
+                for(var table in mongoose.connection.collections){
+                        logger.info(`Droping ${table}...`);
+                        mongoose.connection.collections[table].drop(function (error) {
+                    logger.info('Mongoose! Error in drop test : ' + error);
+                });
+            }
+        }
         mongoose.connection.close(function () {
             logger.info('Mongoose! Disconnected by the application');
             process.exit(0);
