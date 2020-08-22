@@ -7,22 +7,21 @@ module.exports = function () {
     var Location = mongoose.Schema({
         deviceId: { type: String, require: true },
         info: {
-            date: String,
-            direaction: String,
-            distance: String,
-            delayReport: String,
+            date: Date,
+            direction: Number,
+            distance: Number,
+            delayReport: Number,
             composition: {
-                completOriginal: String,
-                completConverted: String,
+                complet: String,
                 GPSFixed: Number,
                 GPSHistoric: Number,
                 ignitionOn: Number,
                 latitudeNegative: Number,
-                longitudeNegative: Number,
+                longitudeNegative: Number
             },
-            velocity: String,
-            latitude: String,
-            logintude: String
+            velocity: Number,
+            latitude: Number,
+            longitude: Number
         },
         package: { type: String, require: true },
         date: { type: Date, require: true }

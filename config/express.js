@@ -17,7 +17,7 @@ module.exports = function () {
         limit: '10mb',
         extended: true
     }));
-    app.use(bodyParser.text({
+    app.use(bodyParser.json({
         limit: '1mb'
     }));
     app.use(methodOverride());

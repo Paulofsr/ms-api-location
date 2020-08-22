@@ -1,131 +1,76 @@
-var logger      = require('../config/logger')(require('../config/settings'));
-const start = "50F7";
-const end = "73C4";
-const deviceLength = 6;
-const cmTypeLength = 2;
+const {decimal,binary} = require('js-in-bits');
 
+        
+function getDate(subPackage){
+    //Data epoch que o dado foi coletado
+    //A data que o ponto foi adquirido obedece ao EPOCH 
+    return new Date(decimal(subPackage.substring(0, 8), 'hexa'));
+}
 
-module.exports = function () {
-    return {
-        preReadPackage: function (package) {
-            logger.info(`[business-locationHelper] Pre-reade: ${package}`);
-            return new Promise(function (resolve, reject) {
-                if(!package || package.length <= (start.length + end.length + deviceLength + cmTypeLength)){
-                    logger.error('[business-locationHelper] Invalid package length.');
-                    rejectInvalidPackage(reject);
-                } else {
-                    let pStart = package.substring(0, start.length);
-                    let pEnd = package.substring(package.length - end.length);
-                    if(pStart != start || pEnd != end){
-                        logger.error('[business-locationHelper] Invalid star or/and end package.');
-                        rejectInvalidPackage(reject);
-                    } else {
-                        resolve(getPreData(package));
-                    }
-                }
-            });
-        },
+function getDirection(subPackage){
+    //Direção que o equipamento se encontra (deve ser dividido por 100 para obter o ângulo correto
+    let direction = decimal(subPackage.substring(8, 12), 'hexa')/100;
 
-        readPackage: function (package) {
-            logger.info(`[business-locationHelper] Getting a location by id: ${id}`);
-            return new Promise(function (resolve, reject) {
+    //A direção que o equipamento está apontando pode variar entre 0 e 359.99
+    return direction >= 0 ? (direction <= 359.99 ? direction : 359.99) : 0;
+}
 
-                if (!id) {
-                    logger.error('[business-locationHelper] The id informed is not valid on gtById method.', id);
-                    reject({
-                        "status": 400,
-                        "message": "The device informed is not valid."
-                    });
-                }
-                locations.find({ deviceId: id })
-                    .exec()
-                    .then(function (result) {
-                        logger.info('[business-locationHelper] Location found: ', result)
-                        if (result.length == 0) {
-                            logger.info('[business-locationHelper] Location not found');
-                            reject({
-                                "status": 400,
-                                "message": "Device not found."
-                            });
-                        } else {
-                            resolve(result[0]);
-                        }
-                    }, function (erro) {
-                        logger.log('error', '[business-locationHelper] An error has occurred while geeting a location by id %s', id, erro);
-                        reject({
-                            "status": 500,
-                            "message": "Internal error."
-                        });
-                    });
+function getDistance(subPackage){
+    //Distância percorrida pelo equipamento em metros(hodômetro)
+    return decimal(subPackage.substring(12, 20), 'hexa');
+}
 
-            });
+function getDelayReport(subPackage){
+    //Tempo que o equipamento está reportando em minutos (horímetro)
+    return decimal(subPackage.substring(20, 28), 'hexa');
+}
+
+function getCompositionBin(subPackage){
+    //Composição de valores em binário: 
+    return binary(subPackage.substring(28, 32), 'hexa');
+}
+
+function getVelocity(subPackage){
+    //Velocidade atual do veículo em KM/H
+    return decimal(subPackage.substring(32, 34), 'hexa');
+}
+
+function getLatitude(subPackage){
+    //Valor da latitude com precisão de 6 casas decimais
+    return decimal(subPackage.substring(34, 42), 'hexa')/1000000;
+}
+
+function getLongitude(subPackage){
+    //Valor da longitude com precisão de 6 casas decimais
+    return decimal(subPackage.substring(42), 'hexa')/1000000;
+}
+
+module.exports = {
+    getLocation: function(preData){
+        let compositionBin = getCompositionBin(preData.subPackage);
+        let location = {
+            deviceId: preData.deviceId,
+            info: {
+                date: getDate(preData.subPackage),
+                direction: getDirection(preData.subPackage),
+                distance: getDistance(preData.subPackage),
+                delayReport: getDelayReport(preData.subPackage),
+                composition: {
+                    complet: compositionBin,
+                    GPSFixed: compositionBin[0],
+                    GPSHistoric: compositionBin[1],
+                    ignitionOn: compositionBin[2],
+                    latitudeNegative: compositionBin[3],
+                    longitudeNegative: compositionBin[4]
+                },
+                velocity: getVelocity(preData.subPackage),
+                latitude: getLatitude(preData.subPackage),
+                longitude: getLongitude(preData.subPackage)
+            },
+            package: preData.package,
+            date: new Date()
         }
 
-        // add: function (package) {
-        //     logger.info('[business-locationHelper] Start add location.');
-        //     return new Promise(function (resolve, reject) {
-        //         let location = {
-        //             deviceId: "111",
-        //             info: {
-        //                 date: "111",
-        //                 direaction: "111",
-        //                 distance: "111",
-        //                 delayReport: "111",
-        //                 composition: {
-        //                     completOriginal: "111",
-        //                     completConverted: "111",
-        //                     GPSFixed: "111",
-        //                     GPSHistoric: "111",
-        //                     ignitionOn: "111",
-        //                     latitudeNegative: "111",
-        //                     longitudeNegative: "111",
-        //                 },
-        //                 velocity: "111",
-        //                 latitude: "111",
-        //                 logintude: "111"
-        //             },
-        //             package: package,
-        //             date: new Date()
-        //         }
-        //         try{
-        //             locations.create(location)
-        //                 .then(function (nlocation) {
-        //                     logger.info('[business-locationHelper] The location has been added successfully.');
-        //                     resolve(nlocation);
-        //                 }, function (erro) {
-        //                     logger.error('[business-locationHelper] An error has ocurred while adding a location.', erro);
-        //                     reject({
-        //                         "status": 500,
-        //                         "message": "Internal error."
-        //                     });
-        //                 })
-        //                 .catch(function(e){
-        //                     logger.error('[business-locationHelper] An error has ocurred while adding a location.', erro);
-        //                     reject(e);
-        //                 })
-        //         } catch (e){
-        //             reject(e);
-        //         }
-        //     });
-        // }
-    };
+        return location;
+    }
 };
-
-
-function rejectInvalidPackage(reject){
-    reject({
-        "status": 400,
-        "message": "Invalid package."
-    })
-}
-
-function getPreData(package){
-    logger.info('[business-locationHelper] get pre-data.');
-    let subPackage = package.substring(start.length, package.length - end.length);
-    return {
-        "deviceId": subPackage.substring(0, 6),
-        "commandType": subPackage.substring(6, 2),
-        "data": subPackage.substring(8),
-        "package": package
-    };
-}

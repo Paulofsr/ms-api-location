@@ -35,17 +35,17 @@ describe('api - location', function(){
                 .expect(404);
         });
 
-        it('Should return error when send an invalid device id.', function () {
-            return request(server)
-                .get(url + '000000000')
-                // .set('X-Authorization', 'Bearer ' + userToken)
-                .set('Accept', 'application/json')
-                .expect(400)
-                .then(r => {
-                    expect(r.body).to.have.property('message');
-                    expect(r.body.message).to.be.equal("Device not found.");
-                });
-        });
+        // it('Should return error when send an invalid device id.', function () {
+        //     return request(server)
+        //         .get(url + '000000000')
+        //         // .set('X-Authorization', 'Bearer ' + userToken)
+        //         .set('Accept', 'application/json')
+        //         .expect(400)
+        //         .then(r => {
+        //             expect(r.body).to.have.property('message');
+        //             expect(r.body.message).to.be.equal("Device not found.");
+        //         });
+        // });
 
         // it('Should find games in wait.', function(){
         //     return request(server)
@@ -130,8 +130,9 @@ describe('api - location', function(){
         it('Should return error when not send package.', function(){
             return request(server)
                 .post(url)
-                .send("")
-                .set('Content-Type', 'text/plain')
+                .send({})
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
                 // .set('X-Authorization', 'Bearer ' + userToken)
                 .expect(400)
                 .then(r => {
@@ -140,79 +141,71 @@ describe('api - location', function(){
                 })
         });
 
-        it('Should return error when send an invalid package length.', function(){
-            return request(server)
-                .post(url)
-                .send("0")
-                .set('Content-Type', 'text/plain')
-                // .set('X-Authorization', 'Bearer ' + userToken)
-                .expect(400)
-                .then(r => {
-                    expect(r.body).to.have.property('message');
-                    expect(r.body.message).to.be.equal("Invalid package.");
-                })
-        });
+        // it('Should return error when send an invalid package length.', function(){
+        //     return request(server)
+        //         .post(url)
+        //         .send("0")
+        //         .set('Content-Type', 'text/plain')
+        //         // .set('X-Authorization', 'Bearer ' + userToken)
+        //         .expect(400)
+        //         .then(r => {
+        //             expect(r.body).to.have.property('message');
+        //             expect(r.body.message).to.be.equal("Invalid package.");
+        //         })
+        // });
 
-        it('Should return error when send an invalid start and end.', function(){
-            return request(server)
-                .post(url)
-                .send("0000000000000000")
-                .set('Content-Type', 'text/plain')
-                // .set('X-Authorization', 'Bearer ' + userToken)
-                .expect(400)
-                .then(r => {
-                    expect(r.body).to.have.property('message');
-                    expect(r.body.message).to.be.equal("Invalid package.");
-                })
-        });
+        // it('Should return error when send an invalid start and end.', function(){
+        //     return request(server)
+        //         .post(url)
+        //         .send("0000000000000000")
+        //         .set('Content-Type', 'text/plain')
+        //         // .set('X-Authorization', 'Bearer ' + userToken)
+        //         .expect(400)
+        //         .then(r => {
+        //             expect(r.body).to.have.property('message');
+        //             expect(r.body.message).to.be.equal("Invalid package.");
+        //         })
+        // });
 
-        it('Should return error when send an invalid start.', function(){
-            return request(server)
-                .post(url)
-                .send("000000000000000073C4")
-                .set('Content-Type', 'text/plain')
-                // .set('X-Authorization', 'Bearer ' + userToken)
-                .expect(400)
-                .then(r => {
-                    expect(r.body).to.have.property('message');
-                    expect(r.body.message).to.be.equal("Invalid package.");
-                })
-        });
+        // it('Should return error when send an invalid start.', function(){
+        //     return request(server)
+        //         .post(url)
+        //         .send("000000000000000073C4")
+        //         .set('Content-Type', 'text/plain')
+        //         // .set('X-Authorization', 'Bearer ' + userToken)
+        //         .expect(400)
+        //         .then(r => {
+        //             expect(r.body).to.have.property('message');
+        //             expect(r.body.message).to.be.equal("Invalid package.");
+        //         })
+        // });
 
-        it('Should return error when send an invalid end.', function(){
-            return request(server)
-                .post(url)
-                .send("50F70000000000000000")
-                .set('Content-Type', 'text/plain')
-                // .set('X-Authorization', 'Bearer ' + userToken)
-                .expect(400)
-                .then(r => {
-                    expect(r.body).to.have.property('message');
-                    expect(r.body.message).to.be.equal("Invalid package.");
-                })
-        });
+        // it('Should return error when send an invalid end.', function(){
+        //     return request(server)
+        //         .post(url)
+        //         .send("50F70000000000000000")
+        //         .set('Content-Type', 'text/plain')
+        //         // .set('X-Authorization', 'Bearer ' + userToken)
+        //         .expect(400)
+        //         .then(r => {
+        //             expect(r.body).to.have.property('message');
+        //             expect(r.body.message).to.be.equal("Invalid package.");
+        //         })
+        // });
 
         it('Should add new package.', function(){
             return request(server)
                 .post(url)
-                .send("50F7000000000000000073C4")
-                .set('Content-Type', 'text/plain')
-                // .set('X-Authorization', 'Bearer ' + userToken)
-                .expect(201)
-                .then(r => {
-                    expect(r.body.length).to.not.equal(0);
-                    console.log(r.body);
-                    // gameInSession = r.body;
-                    // expect(gameInSession.users.length).to.be.equal(1);
-                    // return request(server)
-                    //     .get(url + '/in-wait')
-                    //     .set('X-Authorization', 'Bearer ' + userToken)
-                    //     .set('Accept', 'application/json')
-                    //     .expect(200)
+                .send({
+                    "deviceId_Hex": "ASDFKJLKJL",
+                    "deviceId": "99999999",
+                    "commandType": "02",
+                    "subPackage": "23423423JKJ23KJ4HKJH234",
+                    "package": "JHQK4H2K3J4H2KJH4KJ23H4JK23H4"
                 })
-                // .then(r2 => {
-                //     expect(r2.body.length).to.be.equal(1);
-                // })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .expect(204);
         });
     });
 });

@@ -24,7 +24,7 @@ module.exports = function () {
                             logger.debug('[controllers-locations] Created a new location %s', rAdd);
                             // var token = req.headers['authorization'] ? req.headers['authorization'] : req.query.authorization;
                             // return updateVacation(res, rAdd, 201, '1', rAdd.user, "criação de Férias com sucesso.", token.split(' ')[1]);
-                            res.status(201).json(rAdd);
+                            res.status(204).end();
                         })
                         .catch(function (error) {
                             logger.error('[controllers-locations] Error in add location', error);
