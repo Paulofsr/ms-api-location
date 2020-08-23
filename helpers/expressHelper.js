@@ -32,56 +32,6 @@ module.exports = function () {
             //     req.logger.info('There is no Bearer Authorization token');
             // }
             next();
-        },
-
-        requireLogin: function (req, res, next) {
-            if (req.currentUser) {
-                req.logger.info('There is a current user logged in');
-                next();
-            } else {
-                req.logger.info('There is no user logged in');
-                res.status(403).json({});
-            }
-        },
-
-        requireSupport: function (req, res, next) {
-            if (req.currentUser) {
-                if (req.currentUser.role === 'admin' || req.currentUser.role === 'support') {
-                    next();
-                } else {
-                    res.status(401).json({});
-                }
-            } else {
-                res.status(403).json({});
-            }
-        },
-
-        requireAdmin: function (req, res, next) {
-            if (req.currentUser) {
-                if (req.currentUser.role === 'admin') {
-                    next();
-                } else {
-                    res.status(401).json({});
-                }
-            } else {
-                res.status(403).json({});
-            }
-        },
-
-        requireSameUser: function (req, res, next) {
-            if (req.currentUser) {
-                req.logger.debug('Current user', req.currentUser);
-                req.logger.debug('Target user id', req.params.id);
-                if (req.currentUser.role === 'admin' || req.currentUser.id === req.params.id) {
-                    req.logger.info('Current user is the target user');
-                    next();
-                } else {
-                    req.logger.info('Current user is not the target user');
-                    res.status(404).json({});
-                }
-            } else {
-                res.status(403).json({});
-            }
         }
     };
 };

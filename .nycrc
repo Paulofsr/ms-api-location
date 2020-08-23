@@ -8,5 +8,9 @@
     "config/*",
     "helpers/*.js",
     "server.js"
+  ],
+  "exclude": [
+    "config/logger.js",
+    "helpers/jwtHelper.js"
   ]
 }

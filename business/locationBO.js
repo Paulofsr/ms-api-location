@@ -29,10 +29,10 @@ module.exports = function () {
                             resolve(result[0]);
                         }
                     }, function (erro) {
-                        logger.log('error', '[business-locationBO] An error has occurred while geeting a location by id %s', id, erro);
+                        logger.error(`[business-locationBO] An error has occurred while geeting a location by id ${id}: ${erro}`);
                         reject({
-                            "status": 500,
-                            "message": "Internal error."
+                            "status": 400,
+                            "message": "Invalid id."
                         });
                     });
 
@@ -54,17 +54,7 @@ module.exports = function () {
                     .then(function (nlocation) {
                         logger.info('[business-locationBO] The location has been added successfully.');
                         resolve(nlocation);
-                    }, function (erro) {
-                        logger.error('[business-locationBO] An error has ocurred while adding a location.', erro);
-                        reject({
-                            "status": 500,
-                            "message": "Internal error."
-                        });
-                    })
-                    .catch(function(e){
-                        logger.error('[business-locationBO] An error has ocurred while adding a location.', erro);
-                        reject(e);
-                    })
+                    });
                 } catch (e){
                     reject(e);
                 }

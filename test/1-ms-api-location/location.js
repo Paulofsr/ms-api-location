@@ -4,18 +4,8 @@ var chaiSubset = require('chai-subset');
 chai.use(chaiSubset);
 var expect = chai.expect;
 var server = require('../../server');
-// var settings = require('../../config/settings');
-// var jwtHelper = require('custom-helper').jwtHelper(settings);
 
 describe('api - location', function(){
-    // var userTest = {
-    //     "userId": "f0785ec93d4a",
-    //     "nickName": "User 1",
-    //     "email": "mail@mail.tst",
-    //     "password": "a39352dcb0fc",
-    //     "avatar": ""
-    // };
-    // var userToken = jwtHelper.createToken(userTest, settings);
 
     before(function () {
     });
@@ -25,27 +15,25 @@ describe('api - location', function(){
     });
 
     describe('/v1/location/:device_id', function(){
-        let url = '/v1/location/';
-
         it('Should return error when not send id.', function () {
             return request(server)
-                .get(url)
+                .get('/v1/location/')
                 // .set('X-Authorization', 'Bearer ' + userToken)
                 .set('Accept', 'application/json')
                 .expect(404);
         });
 
-        // it('Should return error when send an invalid device id.', function () {
-        //     return request(server)
-        //         .get(url + '000000000')
-        //         // .set('X-Authorization', 'Bearer ' + userToken)
-        //         .set('Accept', 'application/json')
-        //         .expect(400)
-        //         .then(r => {
-        //             expect(r.body).to.have.property('message');
-        //             expect(r.body.message).to.be.equal("Device not found.");
-        //         });
-        // });
+        it('Should return error when send an invalid device id.', function () {
+            return request(server)
+                .get('/v1/location/000000000')
+                // .set('X-Authorization', 'Bearer ' + userToken)
+                .set('Accept', 'application/json')
+                .expect(400)
+                .then(r => {
+                    expect(r.body).to.have.property('message');
+                    expect(r.body.message).to.be.equal("Device not found.");
+                });
+        });
 
         // it('Should find games in wait.', function(){
         //     return request(server)
@@ -125,20 +113,14 @@ describe('api - location', function(){
 
 
     describe('/v1/info', function(){
-        let url = '/v1/info/';
-
         it('Should return error when not send package.', function(){
             return request(server)
-                .post(url)
+                .post('/v1/info/')
                 .send({})
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 // .set('X-Authorization', 'Bearer ' + userToken)
                 .expect(400)
-                .then(r => {
-                    expect(r.body).to.have.property('message');
-                    expect(r.body.message).to.be.equal("Invalid package.");
-                })
         });
 
         // it('Should return error when send an invalid package length.', function(){
@@ -193,9 +175,9 @@ describe('api - location', function(){
         //         })
         // });
 
-        it('Should add new package.', function(){
+        it('Should return error when send an invalid data in Package.', function(){
             return request(server)
-                .post(url)
+                .post('/v1/info/')
                 .send({
                     "deviceId_Hex": "ASDFKJLKJL",
                     "deviceId": "99999999",
@@ -205,7 +187,91 @@ describe('api - location', function(){
                 })
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
+                .expect(417)
+                .then(r => {
+                    expect(r.body).to.have.property('message');
+                    expect(r.body.message).to.be.equal("Invalid data in Package.");
+                });
+        });
+
+        it('Should return error when send without data in Package.', function(){
+            return request(server)
+                .post('/v1/info/')
+                .send({
+                    "deviceId_Hex": "ASDFKJLKJL",
+                    "deviceId": "99999999",
+                    "commandType": "02",
+                    "subPackage": "",
+                    "package": "JHQK4H2K3J4H2KJH4KJ23H4JK23H4"
+                })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .expect(417)
+                .then(r => {
+                    expect(r.body).to.have.property('message');
+                    expect(r.body.message).to.be.equal("Invalid data in Package.");
+                });
+        });
+
+        it('Should return error when send without data in Package.', function(){
+            return request(server)
+                .post('/v1/info/')
+                .send({
+                    "deviceId_Hex": "ASDFKJLKJL",
+                    "deviceId": "99999999",
+                    "commandType": "02",
+                    "subPackage": "",
+                    "package": "JHQK4H2K3J4H2KJH4KJ23H4JK23H4"
+                })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .expect(417)
+                .then(r => {
+                    expect(r.body).to.have.property('message');
+                    expect(r.body.message).to.be.equal("Invalid data in Package.");
+                });
+        });
+
+        it('Should add new package.', function(){
+            return request(server)
+                .post('/v1/info/')
+                .send({
+                    "deviceId_Hex": "ASDFKJLKJL",
+                    "deviceId": "99999999",
+                    "commandType": "02",
+                    "subPackage": "5EFCF95000000000084000008CA0F8003C013026A1029E72BD",
+                    "package": "JHQK4H2K3J4H2KJH4KJ23H4JK23H4"
+                })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
                 .expect(204);
+        });
+
+        it('Should add new package.', function(){
+            return request(server)
+                .post('/v1/info/')
+                .send({
+                    "deviceId_Hex": "ASDFKJLKJL",
+                    "deviceId": "99999999",
+                    "commandType": "02",
+                    "subPackage": "5EFCF950156F017D784000008CA0F8003C013026A1029E72BD",
+                    "package": "JHQK4H2K3J4H2KJH4KJ23H4JK23H4"
+                })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .expect(204);
+        });
+
+        it('Should return data of deviceId added.', function () {
+            return request(server)
+                .get('/v1/location/99999999')
+                // .set('X-Authorization', 'Bearer ' + userToken)
+                .set('Accept', 'application/json')
+                .expect(200)
+                .then(r => {
+                    expect(r.body).to.have.property('deviceId');
+                    expect(r.body.deviceId).to.be.equal("99999999");
+                });
         });
     });
 });

@@ -1,3 +1,4 @@
+var logger      = require('../config/logger')(require('../config/settings'));
 const {decimal,binary} = require('js-in-bits');
 
         
@@ -47,7 +48,14 @@ function getLongitude(subPackage){
 
 module.exports = {
     getLocation: function(preData){
+        logger.debug('getLocation');
+        if(preData.subPackage.length != 50)
+            throw {
+                "status": 417,
+                "message": "Invalid data in Package."
+            }
         let compositionBin = getCompositionBin(preData.subPackage);
+        logger.debug('getLocation1');
         let location = {
             deviceId: preData.deviceId,
             info: {
