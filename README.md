@@ -10,10 +10,10 @@ Nesa versão é fornecido as seguintes ações:
 
 ## Recursos Necessários
 
-Para rodar a aplicação em Docker ou Kubernetes basta somente ou gerar uma imagem da versão escolhida ou usar a imagem disponível repositório [ms-api-location](https://hub.docker.com/r/paulofsr/ms-api-location). Nos Sistemas Operacionais (Windows, Mac ou Linux) será necessário in
+Para rodar a aplicação em Docker ou Kubernetes basta somente ou gerar uma imagem da versão escolhida ou usar a imagem disponível repositório [ms-api-location](https://hub.docker.com/r/paulofsr/ms-api-location). Nos Sistemas Operacionais (Windows, Mac ou Linux) será necessário instalar os seguintes recursos:
 
-* Nodejs
-* MongoDB
+* [Nodejs](https://nodejs.org/en/download/)
+* [MongoDB](https://www.mongodb.com/try/download/community)
 
 ## Instalação
 
@@ -35,7 +35,7 @@ node server.js
 Caso queira utilizar um ambiente com [Docker](https://www.docker.com/) basta executar o comando abaixo.
 
 ```shell
-docker container run --name [NOME_DO_CONTAINER] -d -p [PORTA_DISPONÍVEL]:5300 ms-api-location
+docker container run --name [NOME_DO_CONTAINER] -d -p [PORTA_DISPONÍVEL]:5300 paulofsr/ms-api-location
 ```
 
 Altera a informação **NOME_DO_CONTAINER** para um nome a sua escolha, pois isso será importante para montar o link nos container em comunicação com essa aplicação. E no **PORTA_DISPONÍVEL** informe a porta que queira disponibilizar para acessar à aplicação.

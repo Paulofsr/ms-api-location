@@ -15,18 +15,18 @@ module.exports = function () {
                         "message": "The device informed is not valid."
                     });
                 }
-                locations.find({ deviceId: id })
+                locations.findOne({ deviceId: id })
                     .exec()
                     .then(function (result) {
                         logger.info('[business-locationBO] Location found: ', result)
-                        if (result.length == 0) {
+                        if (!result || result.length == 0) {
                             logger.info('[business-locationBO] Location not found');
                             reject({
                                 "status": 400,
                                 "message": "Device not found."
                             });
                         } else {
-                            resolve(result[0]);
+                            resolve(result);
                         }
                     }, function (erro) {
                         logger.error(`[business-locationBO] An error has occurred while geeting a location by id ${id}: ${erro}`);

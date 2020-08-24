@@ -26,6 +26,7 @@ module.exports = function () {
         package: { type: String, require: true },
         date: { type: Date, require: true }
     });
+    Location.index({ deviceId: 1, date: -1});
 
     model = model ? model : mongoose.model('Locations' + (process.env.IN_TEST ? 'Test' : ''), Location);
 
