@@ -1,6 +1,3 @@
-// var settings = require('../../config/settings');
-// var Logger = require('../../config/logger');
-// var logger = new Logger(settings);
 var logger      = require('../../config/logger')(require('../../config/settings'));
 var locationBO  = require('../../business/locationBO')();
 

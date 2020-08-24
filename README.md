@@ -38,6 +38,12 @@ Caso queira utilizar um ambiente com [Docker](https://www.docker.com/) basta exe
 docker container run --name [NOME_DO_CONTAINER] -d -p [PORTA_DISPONÍVEL]:5300 paulofsr/ms-api-location
 ```
 
+Exemplo:
+
+```shell
+docker container run --name location -d -p 5300:5300 paulofsr/ms-api-location
+```
+
 Altera a informação **NOME_DO_CONTAINER** para um nome a sua escolha, pois isso será importante para montar o link nos container em comunicação com essa aplicação. E no **PORTA_DISPONÍVEL** informe a porta que queira disponibilizar para acessar à aplicação.
 
 
