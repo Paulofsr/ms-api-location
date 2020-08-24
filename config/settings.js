@@ -11,9 +11,5 @@ module.exports = {
         dbLebel: process.env.LOGGING_DB_LEVEL || 'debug',
         useDB: process.env.LOGGING_USE_DB === 'true',
         saveRequests: process.env.LOGGING_SAVE_REQUESTS === 'false'
-    },
-    jwt: {
-        secret: process.env.SECRET_KEY || 'secret',
-        expiresIn: '1h'
     }
 };
